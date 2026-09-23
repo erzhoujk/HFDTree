@@ -39,7 +39,8 @@ def write_results(trees: Iterable[HFDTree], path: str | Path) -> None:
     with Path(path).open("w", encoding="utf-8") as handle:
         for tree in trees:
             for result in tree.results():
-                handle.write(json.dumps({"task_id": tree.task_id, **result}, ensure_ascii=False) + "\n")
+                record = json.dumps({"task_id": tree.task_id, **result}, ensure_ascii=False)
+                handle.write(record + "\n")
 
 
 def _parse_turn(item: dict[str, object], temperature: float, delta: float) -> Turn:

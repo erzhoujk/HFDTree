@@ -28,7 +28,8 @@ def test_empirical_transition_probabilities_use_visits() -> None:
     first, second = tree.root.children
     assert first.transition_probability == pytest.approx(2 / 3)
     assert second.transition_probability == pytest.approx(1 / 3)
-    assert sum(c.transition_probability * c.credit for c in tree.root.children) == pytest.approx(0.0)
+    centered_credit = sum(c.transition_probability * c.credit for c in tree.root.children)
+    assert centered_credit == pytest.approx(0.0)
 
 
 def test_repeated_edge_must_have_cached_consistent_evidence() -> None:
