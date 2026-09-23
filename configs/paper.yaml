@@ -1,0 +1,11 @@
+# Hyperparameters reported in Appendix C.2 of the provided manuscript.
+rollout_group_size: 8
+gamma: 0.9
+temperature: 0.5
+evidence_dead_zone: 0.05
+fallback_credit_epsilon: 0.05
+optimizer:
+  name: AdamW
+  learning_rate: 1.0e-5
+  weight_decay: 0.01
+  steps: 1000
