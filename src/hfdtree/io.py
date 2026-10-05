@@ -36,7 +36,9 @@ def load_jsonl(
 
 
 def write_results(trees: Iterable[HFDTree], path: str | Path) -> None:
-    with Path(path).open("w", encoding="utf-8") as handle:
+    destination = Path(path)
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    with destination.open("w", encoding="utf-8") as handle:
         for tree in trees:
             for result in tree.results():
                 record = json.dumps({"task_id": tree.task_id, **result}, ensure_ascii=False)
@@ -44,11 +46,17 @@ def write_results(trees: Iterable[HFDTree], path: str | Path) -> None:
 
 
 def _parse_turn(item: dict[str, object], temperature: float, delta: float) -> Turn:
+    if not isinstance(item, dict):
+        raise TypeError("each turn must be an object")
     if "local_evidence" in item:
         local = float(item["local_evidence"])
         normalized = item.get("normalized_evidence")
         normalized = float(normalized) if normalized is not None else None
     else:
+        if "positive_logprobs" not in item or "negative_logprobs" not in item:
+            raise ValueError(
+                "turn must provide local_evidence or positive_logprobs and negative_logprobs"
+            )
         evidence = compute_evidence(
             item["positive_logprobs"],  # type: ignore[arg-type]
             item["negative_logprobs"],  # type: ignore[arg-type]

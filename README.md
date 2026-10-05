@@ -20,6 +20,8 @@ benchmark numbers.
 - Clipped credit-guided PyTorch loss and state-valid safe-reference fallback.
 - A low-level Hugging Face scoring helper that keeps action token IDs fixed across contexts.
 - JSONL CLI, paper hyperparameters, a toy rollout, and unit tests.
+- Root-level aggregate diagnostics, strict finite-value validation, and optional CLI
+  input validation for safer batch processing.
 
 ## Method mapping
 
@@ -81,6 +83,9 @@ Run the bundled pre-scored rollout example:
 
 ```bash
 hfdtree examples/toy_rollouts.jsonl -o credits.jsonl
+
+# Fail fast on empty/malformed rollout batches and create parent directories as needed.
+hfdtree examples/toy_rollouts.jsonl -o results/credits.jsonl --validate
 ```
 
 Or use the Python API:

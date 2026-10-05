@@ -2,8 +2,9 @@
 
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass, field
-from typing import Hashable, Iterable, Iterator, Mapping, Sequence
+from typing import Hashable, Iterable, Iterator, Sequence
 
 
 @dataclass(frozen=True, slots=True)
@@ -71,10 +72,14 @@ class HFDTree:
     def add_trajectory(self, turns: Sequence[Turn]) -> list[Node]:
         """Merge a rollout by exact (action, observation) prefix and count visits."""
 
+        if not isinstance(turns, Sequence):
+            raise TypeError("turns must be a sequence")
+
         node = self.root
         node.visits += 1
         realized: list[Node] = []
         for turn in turns:
+            _validate_turn(turn)
             key = (turn.action, turn.observation)
             child = node._child_index.get(key)
             if child is None:
@@ -121,6 +126,19 @@ class HFDTree:
             node.horizon = 1.0 + gamma * expected_z
             node.belief = node.utility / node.horizon
 
+        # The root is not a training node, but exposing its aggregate value is
+        # useful for diagnostics and makes the recursion complete at depth 0.
+        if self.root.children:
+            self.root.utility = sum(
+                c.transition_probability * c.utility for c in self.root.children
+            ) * gamma
+            self.root.horizon = 1.0 + gamma * sum(
+                c.transition_probability * c.horizon for c in self.root.children
+            )
+            self.root.belief = self.root.utility / self.root.horizon
+        else:
+            self.root.utility, self.root.horizon, self.root.belief = 0.0, 1.0, 0.0
+
         for parent in self.nodes(include_root=True):
             if not parent.children:
                 continue
@@ -144,6 +162,9 @@ class HFDTree:
                 "visits": node.visits,
                 "transition_probability": node.transition_probability,
                 "local_evidence": node.turn.local_evidence if node.turn else None,
+                "normalized_evidence": node.turn.normalized_evidence if node.turn else None,
+                "reference_action": node.turn.reference_action if node.turn else None,
+                "reference_valid": node.turn.reference_valid if node.turn else False,
                 "utility": node.utility,
                 "horizon": node.horizon,
                 "belief": node.belief,
@@ -170,3 +191,11 @@ def _validate_repeated_turn(existing: Turn | None, incoming: Turn) -> None:
         raise ValueError(
             "repeated exact-prefix edge has inconsistent fields: " + ", ".join(mismatched)
         )
+
+def _validate_turn(turn: Turn) -> None:
+    if not math.isfinite(float(turn.local_evidence)):
+        raise ValueError("local evidence must be finite")
+    if turn.normalized_evidence is not None and not math.isfinite(
+        float(turn.normalized_evidence)
+    ):
+        raise ValueError("normalized evidence must be finite")

@@ -37,3 +37,22 @@ def test_repeated_edge_must_have_cached_consistent_evidence() -> None:
     tree.add_trajectory([Turn("a", "x", 0.1)])
     with pytest.raises(ValueError, match="inconsistent"):
         tree.add_trajectory([Turn("a", "x", 0.2)])
+
+
+def test_root_aggregate_and_reference_metadata_are_exposed() -> None:
+    tree = HFDTree("task")
+    tree.add_trajectory(
+        [Turn("safe", "ok", 0.3, normalized_evidence=0.1,
+              reference_action="ask", reference_valid=True)]
+    )
+    tree.propagate(gamma=0.5)
+    assert tree.root.belief == pytest.approx(0.1)
+    result = tree.results()[0]
+    assert result["reference_action"] == "ask"
+    assert result["reference_valid"] is True
+
+
+def test_non_finite_evidence_is_rejected() -> None:
+    tree = HFDTree("task")
+    with pytest.raises(ValueError, match="finite"):
+        tree.add_trajectory([Turn("bad", "nan", float("nan"))])
