@@ -22,6 +22,8 @@ benchmark numbers.
 - JSONL CLI, paper hyperparameters, a toy rollout, and unit tests.
 - Root-level aggregate diagnostics, strict finite-value validation, and optional CLI
   input validation for safer batch processing.
+- Evaluation-only AgentHarm JSON/JSONL schema validation and category/split coverage
+  reporting; raw benchmark prompts are never used as training targets.
 
 ## Method mapping
 
@@ -87,6 +89,21 @@ hfdtree examples/toy_rollouts.jsonl -o credits.jsonl
 # Fail fast on empty/malformed rollout batches and create parent directories as needed.
 hfdtree examples/toy_rollouts.jsonl -o results/credits.jsonl --validate
 ```
+
+## AgentHarm evaluation export
+
+AgentHarm is an evaluation benchmark rather than a pre-scored rollout file. The
+adapter validates a local JSON/JSONL export and prints only aggregate coverage
+statistics (it does not print harmful prompts):
+
+```bash
+hfdtree-agentharm path/to/agentharm.json --split test_public
+```
+
+The benchmark's license and dataset card require safety/security evaluation use;
+do not feed AgentHarm prompts into training. To run HFDTree on model results,
+convert externally generated, fixed-token positive/negative scores into the
+normal rollout JSONL format described below.
 
 Or use the Python API:
 

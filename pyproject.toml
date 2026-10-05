@@ -24,6 +24,7 @@ dev = ["pytest>=8", "ruff>=0.6"]
 
 [project.scripts]
 hfdtree = "hfdtree.cli:main"
+hfdtree-agentharm = "hfdtree.agentharm_cli:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/hfdtree"]
