@@ -3,10 +3,8 @@
 An independent, readable implementation of **Hindsight and Foresight Distillation Tree**
 for turn-level safety credit assignment in LLM agents.
 
-This repository implements the method described in the provided anonymous ICLR 2027
-manuscript, *Safety Alignment for Agents via Hindsight and Foresight Distillation Tree*.
-It is not an official author release and does not claim to reproduce the paper's reported
-benchmark numbers.
+
+
 
 ## What is implemented
 
