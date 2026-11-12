@@ -1,0 +1,15 @@
+{
+  "AgentHarm_evaluation_only_pairs": 208,
+  "AgentSafetyBench_execution_seeds": 258,
+  "AgentSafetyBench_pair_groups": 129,
+  "source_record_overlap_between_splits": 0,
+  "split_pair_group_counts": {
+    "development_holdout": 26,
+    "development_train": 103
+  },
+  "split_seed_counts": {
+    "development_holdout": 52,
+    "development_train": 206
+  },
+  "verified_trajectory_pairs_created": 0
+}

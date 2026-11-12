@@ -1,0 +1,1 @@
+artifacts/production/qwen3_4b_g8_v2/training/full_seed42/adapter_model.safetensors filter=lfs diff=lfs merge=lfs -text
