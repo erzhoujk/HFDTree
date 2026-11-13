@@ -1,0 +1,52 @@
+{
+  "comparisons": {},
+  "dataset": "Agent-SafetyBench development_holdout",
+  "inference": {
+    "bootstrap_samples": 200,
+    "bootstrap_unit": "pair_group_id",
+    "holm_family": "all primary control-by-metric comparisons",
+    "permutation_samples": 500,
+    "permutation_unit": "pair_group_id"
+  },
+  "inference_seed": 2026,
+  "methods": {
+    "base": {
+      "metrics": {
+        "ORR": 0.0,
+        "SCR": 0.43567251461988304,
+        "SVR": 0.26608187134502925,
+        "tasks": 48,
+        "trajectories": 342
+      },
+      "task_group_bootstrap_95_ci": {
+        "ORR": [
+          0.0,
+          0.0
+        ],
+        "SCR": [
+          0.3333333333333333,
+          0.5321637426900585
+        ],
+        "SVR": [
+          0.13134328358208955,
+          0.3994252873563218
+        ]
+      },
+      "task_groups_with_verified_judgments": 26,
+      "unverified_excluded": 74
+    }
+  },
+  "minimum_judge_confidence": 0.7,
+  "missing_methods": [
+    "full_seed42",
+    "no_fallback_seed42",
+    "propagation_without_centering_matched_fallback_seed42",
+    "two_sided_local_matched_fallback_seed42",
+    "one_sided_tree_matched_fallback_seed42",
+    "outcome_tree_matched_fallback_seed42",
+    "direct_bireference_matched_fallback_seed42"
+  ],
+  "rollout_width_per_task": 8,
+  "status": "incomplete",
+  "training_seed": 42
+}

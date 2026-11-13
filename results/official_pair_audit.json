@@ -1,0 +1,73 @@
+{
+  "agent_safety_bench": {
+    "coverage": {
+      "shared_environments": 37,
+      "shared_risks": 7,
+      "shared_tools": 63
+    },
+    "current_pairing_is_maximum_cardinality_under_strict_condition": true,
+    "invalid_strict_pairs": [],
+    "maximum_matching_by_condition": {
+      "same_environment_shared_tool": 187,
+      "same_risk_environment_shared_tool": 129,
+      "shared_environment": 435,
+      "shared_risk": 699,
+      "shared_tool": 297
+    },
+    "score_formula_consistent": true,
+    "score_formula_inconsistencies": [],
+    "strict_pairs_valid": true,
+    "unique_negative_records": 129,
+    "unique_positive_records": 129
+  },
+  "agentharm": {
+    "all_pairs": 208,
+    "native_id_pairs": 208,
+    "reason": "The official dataset card requests evaluation-only use.",
+    "same_target_functions_pairs": 171,
+    "training_allowed": false
+  },
+  "artifact": {
+    "declared_counts": {
+      "AgentHarm": 208,
+      "AgentSafetyBench": 129,
+      "total_pairs": 337,
+      "total_source_records": 674
+    },
+    "observed_counts": {
+      "AgentHarm": 208,
+      "AgentSafetyBench": 129,
+      "total_pairs": 337
+    }
+  },
+  "provenance": {
+    "agent_safety_bench_source_sha256": "59dd0333001ef767766d803e97086ec02af0fbf7ff1f7070b3797863b0dacbe2",
+    "agentharm_source_sha256": {
+      "benign_behaviors_test_public.json": "65b4ebd4d8d2e7c9a79db4e11bc642f1800e642be0626ba0a990c763a325957a",
+      "benign_behaviors_validation.json": "b74ffb781ce54182775a8b2843ea341ab2fb4cfea5743bfa89a368e52a76c27a",
+      "harmful_behaviors_test_public.json": "fc3e4abbcd812022b85150b0e6f81c0bdbdfabb486e5b82ec46f1ba135f3ba08",
+      "harmful_behaviors_validation.json": "40cd099915258b41142acfc88a9f2b4e15cd631c5490ad02a0dce0cf2b9c175e"
+    },
+    "artifact_sha256": "eb3037c18f6cb14755ef0b21843669efb1eb30f94cfa6159e28b0555905a2f85"
+  },
+  "semantic_validity": {
+    "artifact_level": "official_task_or_record_pairs",
+    "usable_as_hfdtree_c_plus_c_minus_without_execution": false,
+    "verified_executed_trajectory_pairs": 0
+  },
+  "source_counts": {
+    "AgentHarm_pairs_by_split": {
+      "test_public": 176,
+      "validation": 32
+    },
+    "AgentSafetyBench": 2000,
+    "AgentSafetyBench_fulfillable_0": 1265,
+    "AgentSafetyBench_fulfillable_1": 735
+  },
+  "source_fidelity": {
+    "agent_safety_bench_exact": true,
+    "agent_safety_bench_mismatches": [],
+    "agentharm_exact": true,
+    "agentharm_mismatches": []
+  }
+}

@@ -3,6 +3,9 @@
 An independent, readable implementation of **Hindsight and Foresight Distillation Tree**
 for turn-level safety credit assignment in LLM agents.
 
+Reviewer-facing data provenance, validation, demonstrations, experiment entry points, and result
+status are collected in the [experiment and data reproducibility index](docs/REPRODUCIBILITY_INDEX.md).
+
 
 
 
@@ -22,6 +25,8 @@ for turn-level safety credit assignment in LLM agents.
   input validation for safer batch processing.
 - Evaluation-only AgentHarm JSON/JSONL schema validation and category/split coverage
   reporting; raw benchmark prompts are never used as training targets.
+- Reproducible official-pair source audit, maximum-matching sensitivity analysis, and
+  fail-closed validation for same-state, scorer-verified trajectory pairs.
 
 ## Method mapping
 
@@ -77,6 +82,9 @@ python -m pip install -e '.[dev,train]'
 pytest
 ```
 
+The `train` extra includes Transformers, PEFT, and Accelerate for the production
+rollout/scoring/LoRA scripts. GPU jobs additionally require a working CUDA runtime.
+
 ## Quick start
 
 Run the bundled pre-scored rollout example:
@@ -102,6 +110,12 @@ The benchmark's license and dataset card require safety/security evaluation use;
 do not feed AgentHarm prompts into training. To run HFDTree on model results,
 convert externally generated, fixed-token positive/negative scores into the
 normal rollout JSONL format described below.
+
+The official dataset card asks researchers not to train on AgentHarm examples. The
+included data-construction tools therefore export only a prompt-free evaluation index
+for AgentHarm. See [`docs/REVIEWER_EXPERIMENTS.md`](docs/REVIEWER_EXPERIMENTS.md) for
+the source audit, corrected pair counts, contamination controls, and the protocol that
+must be completed before task records can become training trajectories.
 
 Or use the Python API:
 
@@ -209,6 +223,68 @@ The paper leaves some engineering choices unspecified. This implementation makes
 
 These choices implement the published equations while keeping benchmark-specific assumptions out
 of the core algorithm.
+
+## Production experiment pipeline
+
+The reviewer-facing pipeline is split into checkpointed stages so collection, judging, fixed-token
+scoring, and LoRA training have separate cost records:
+
+```bash
+# After fetching the pinned benchmark checkouts and building the manifests:
+gbatch -g 1 --gpu-memory 20G --array 0-41 --max-concurrent 3 \
+  -t 00:08:00 bash scripts/docker/collect_qwen_production_shard.sh
+
+PYTHONPATH=src python scripts/merge_rollout_shards.py \
+  --input-dir artifacts/production/qwen3_4b_g8_v2/train_collection \
+  --output artifacts/production/qwen3_4b_g8_v2/train_rollouts.jsonl \
+  --expected-tasks 206
+
+gbatch -g 1 --gpu-memory 20G --array 0-41 --max-concurrent 3 \
+  -t 00:08:00 bash scripts/docker/judge_qwen_production_shard.sh
+
+gbatch -g 1 --gpu-memory 20G --array 0-41 --max-concurrent 3 \
+  -t 00:08:00 bash scripts/docker/score_qwen_production_shard.sh
+```
+
+Collection enforces eight executed rollouts per task even when early terminal answers collapse the
+initial breadth-first tree. Pair validation checks the actual first-state fingerprint and every
+before/after state transition; declared metadata alone is not accepted as proof of same-state
+execution. The structured judge records refusal separately from correct refusal so ORR is computed
+on fulfillable tasks, and confidence intervals use task-cluster bootstrap resampling.
+
+### Matched-fallback attribution controls
+
+The legacy seed-42 diagnostics do not all contain the same fallback targets. For structural
+attribution, build and train the corrected controls, which reuse the exact 27 fallback examples
+selected by the full objective:
+
+```bash
+PYTHONPATH=src python scripts/build_matched_bireference_control.py \
+  --direct-bireference artifacts/production/qwen3_4b_g8_v2/merged/direct_bireference_nodes.jsonl \
+  --scored-nodes artifacts/production/qwen3_4b_g8_v2/merged/scored_nodes.jsonl \
+  --output \
+    artifacts/production/qwen3_4b_g8_v2/merged/direct_bireference_matched_fallback_nodes.jsonl
+
+bash scripts/submit_qwen_matched_fallback_training.sh 42
+# Repeat with 43 and 44 for the multi-seed experiment.
+
+# After training completes, run each phase separately and wait for it to finish.
+bash scripts/submit_qwen_attribution_holdout_matrix.sh collect 42
+bash scripts/submit_qwen_attribution_holdout_matrix.sh judge 42
+```
+
+After collecting and judging all 52 holdout shards for each method, produce the primary table and
+paired inference from raw judgments:
+
+```bash
+PYTHONPATH=src python scripts/aggregate_controlled_holdout.py \
+  --holdout-root artifacts/production/qwen3_4b_g8_v2/holdout_eval \
+  --output results/equal_information_holdout.md
+```
+
+The report uses pair-group bootstrap intervals, pair-group label-swap permutation tests, and Holm
+correction over all primary control-by-metric comparisons. It fails closed unless every required
+method has 52 judged shards; `--allow-incomplete` is only for progress reports.
 
 ## Repository layout
 

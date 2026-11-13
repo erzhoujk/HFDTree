@@ -1,0 +1,274 @@
+{
+  "evaluation": {
+    "adapter": {
+      "ORR": null,
+      "SCR": null,
+      "SVR": null,
+      "fulfillable_trajectories": 0,
+      "tasks": 0,
+      "unfulfillable_trajectories": 0,
+      "verified_trajectories": 0
+    },
+    "adapter_files": 0,
+    "adapter_unverified_excluded": 0,
+    "baseline": {
+      "ORR": 0.0,
+      "SCR": 0.43567251461988304,
+      "SVR": 0.26608187134502925,
+      "fulfillable_trajectories": 200,
+      "tasks": 48,
+      "unfulfillable_trajectories": 142,
+      "verified_trajectories": 342
+    },
+    "baseline_files": 52,
+    "baseline_unverified_excluded": 74,
+    "paired": null
+  },
+  "production": {
+    "collected_tasks": 206,
+    "collection_cost": {
+      "forward_calls": 0,
+      "input_tokens": 2882015,
+      "output_tokens": 189702,
+      "scored_action_tokens": 0,
+      "scored_prompt_tokens": 0,
+      "wall_seconds_sum": 8562.43147334503
+    },
+    "collection_shards": 42,
+    "eligible_by_source_role": {
+      "negative_sample": 4,
+      "positive_sample": 21
+    },
+    "environment_executions": 4911,
+    "judge_cost": {
+      "forward_calls": 0,
+      "input_tokens": 1406714,
+      "output_tokens": 151345,
+      "scored_action_tokens": 0,
+      "scored_prompt_tokens": 0,
+      "wall_seconds_sum": 7350.945498794899
+    },
+    "judge_shards": 42,
+    "judged_tasks": 206,
+    "pair_eligibility_rate": 0.12135922330097088,
+    "reference_environment_executions": 1286,
+    "score_shards": 42,
+    "scored_training_nodes": 242,
+    "scoring_cost": {
+      "forward_calls": 726,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "scored_action_tokens": 50823,
+      "scored_prompt_tokens": 629916,
+      "wall_seconds_sum": 86.728609121521
+    },
+    "verified_pairs": 25
+  },
+  "status": "incomplete: adapter holdout evaluation pending",
+  "training": {
+    "matched_budget": true,
+    "seed": 42,
+    "variants": [
+      {
+        "control": "full",
+        "examples": 219,
+        "fallback_examples": 27,
+        "gpu_energy_wh": 281.3644297222223,
+        "gpu_hours": 0.9565173736892434,
+        "hyperparameters": {
+          "batch_size": 2,
+          "delta": 0.05,
+          "epsilon": 0.05,
+          "gradient_accumulation_steps": 8,
+          "learning_rate": 1e-05,
+          "lora_alpha": 32,
+          "lora_rank": 16,
+          "max_length": 4096,
+          "max_steps": 1000,
+          "resume": true,
+          "weight_decay": 0.01
+        },
+        "mean_recent_loss": -6.219026883202605,
+        "optimizer_steps": 1000,
+        "peak_gpu_memory_bytes": 30960227328,
+        "tokens_processed": 10907172,
+        "wall_seconds": 3443.462545281276
+      },
+      {
+        "control": "no_fallback",
+        "examples": 218,
+        "fallback_examples": 0,
+        "gpu_energy_wh": 283.9225516666667,
+        "gpu_hours": 0.964905092386697,
+        "hyperparameters": {
+          "batch_size": 2,
+          "delta": 0.05,
+          "epsilon": 0.05,
+          "gradient_accumulation_steps": 8,
+          "learning_rate": 1e-05,
+          "lora_alpha": 32,
+          "lora_rank": 16,
+          "max_length": 4096,
+          "max_steps": 1000,
+          "resume": true,
+          "weight_decay": 0.01
+        },
+        "mean_recent_loss": -7.302691925410182,
+        "optimizer_steps": 1000,
+        "peak_gpu_memory_bytes": 31115312640,
+        "tokens_processed": 10954913,
+        "wall_seconds": 3473.658332592109
+      },
+      {
+        "control": "propagation_without_centering",
+        "examples": 195,
+        "fallback_examples": 0,
+        "gpu_energy_wh": 281.30783444444444,
+        "gpu_hours": 0.9564242849715973,
+        "hyperparameters": {
+          "batch_size": 2,
+          "delta": 0.05,
+          "epsilon": 0.05,
+          "gradient_accumulation_steps": 8,
+          "learning_rate": 1e-05,
+          "lora_alpha": 32,
+          "lora_rank": 16,
+          "max_length": 4096,
+          "max_steps": 1000,
+          "resume": true,
+          "weight_decay": 0.01
+        },
+        "mean_recent_loss": -14.936777778994292,
+        "optimizer_steps": 1000,
+        "peak_gpu_memory_bytes": 32379570688,
+        "tokens_processed": 10870210,
+        "wall_seconds": 3443.12742589775
+      },
+      {
+        "control": "two_sided_local_only",
+        "examples": 166,
+        "fallback_examples": 0,
+        "gpu_energy_wh": 288.7948955555555,
+        "gpu_hours": 0.9816023758497128,
+        "hyperparameters": {
+          "batch_size": 2,
+          "delta": 0.05,
+          "epsilon": 0.05,
+          "gradient_accumulation_steps": 8,
+          "learning_rate": 1e-05,
+          "lora_alpha": 32,
+          "lora_rank": 16,
+          "max_length": 4096,
+          "max_steps": 1000,
+          "resume": true,
+          "weight_decay": 0.01
+        },
+        "mean_recent_loss": -18.90212166454512,
+        "optimizer_steps": 1000,
+        "peak_gpu_memory_bytes": 32362769408,
+        "tokens_processed": 11223762,
+        "wall_seconds": 3533.768553058966
+      },
+      {
+        "control": "two_sided_local_with_fallback",
+        "examples": 216,
+        "fallback_examples": 50,
+        "gpu_energy_wh": 280.9603208333334,
+        "gpu_hours": 0.9546741792863597,
+        "hyperparameters": {
+          "batch_size": 2,
+          "delta": 0.05,
+          "epsilon": 0.05,
+          "gradient_accumulation_steps": 8,
+          "learning_rate": 1e-05,
+          "lora_alpha": 32,
+          "lora_rank": 16,
+          "max_length": 4096,
+          "max_steps": 1000,
+          "resume": true,
+          "weight_decay": 0.01
+        },
+        "mean_recent_loss": -11.280118364989903,
+        "optimizer_steps": 1000,
+        "peak_gpu_memory_bytes": 30191784960,
+        "tokens_processed": 10891122,
+        "wall_seconds": 3436.827045430895
+      },
+      {
+        "control": "one_sided_tree",
+        "examples": 234,
+        "fallback_examples": 0,
+        "gpu_energy_wh": 289.8251425,
+        "gpu_hours": 0.9845648368042506,
+        "hyperparameters": {
+          "batch_size": 2,
+          "delta": 0.05,
+          "epsilon": 0.05,
+          "gradient_accumulation_steps": 8,
+          "learning_rate": 1e-05,
+          "lora_alpha": 32,
+          "lora_rank": 16,
+          "max_length": 4096,
+          "max_steps": 1000,
+          "resume": true,
+          "weight_decay": 0.01
+        },
+        "mean_recent_loss": -10.080581476911902,
+        "optimizer_steps": 1000,
+        "peak_gpu_memory_bytes": 32436869632,
+        "tokens_processed": 11227968,
+        "wall_seconds": 3544.433412495302
+      },
+      {
+        "control": "outcome_tree_equal_information",
+        "examples": 197,
+        "fallback_examples": 0,
+        "gpu_energy_wh": 290.2130288888888,
+        "gpu_hours": 0.9855327906946251,
+        "hyperparameters": {
+          "batch_size": 2,
+          "delta": 0.05,
+          "epsilon": 0.05,
+          "gradient_accumulation_steps": 8,
+          "learning_rate": 1e-05,
+          "lora_alpha": 32,
+          "lora_rank": 16,
+          "max_length": 4096,
+          "max_steps": 1000,
+          "resume": true,
+          "weight_decay": 0.01
+        },
+        "mean_recent_loss": -22.421977896383034,
+        "optimizer_steps": 1000,
+        "peak_gpu_memory_bytes": 32322068480,
+        "tokens_processed": 11283913,
+        "wall_seconds": 3547.9180465006502
+      },
+      {
+        "control": "direct_bireference_equal_information",
+        "examples": 121,
+        "fallback_examples": 0,
+        "gpu_energy_wh": 283.0355255555556,
+        "gpu_hours": 0.9620548793799956,
+        "hyperparameters": {
+          "batch_size": 2,
+          "delta": 0.05,
+          "epsilon": 0.05,
+          "gradient_accumulation_steps": 8,
+          "learning_rate": 1e-05,
+          "lora_alpha": 32,
+          "lora_rank": 16,
+          "max_length": 4096,
+          "max_steps": 1000,
+          "resume": true,
+          "weight_decay": 0.01
+        },
+        "mean_recent_loss": -70.22698691934329,
+        "optimizer_steps": 1000,
+        "peak_gpu_memory_bytes": 32399917056,
+        "tokens_processed": 10900501,
+        "wall_seconds": 3463.397565767984
+      }
+    ]
+  }
+}
